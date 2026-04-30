@@ -2,12 +2,7 @@ name: Daily Brief
 
 on:
   schedule:
-    # 13:00 UTC = 7:00 AM CDT (Apr-Oct)
-    # Change to 14:00 UTC for CST (Nov-Mar) — or just leave at 13:00 and
-    # accept the brief arriving at 8 AM in winter
     - cron: '0 13 * * *'
-
-  # Allow manual trigger from the Actions tab (useful for testing)
   workflow_dispatch:
 
 jobs:
