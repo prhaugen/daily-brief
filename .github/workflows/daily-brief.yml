@@ -1,0 +1,34 @@
+name: Daily Brief
+
+on:
+  schedule:
+    # 13:00 UTC = 7:00 AM CDT (Apr-Oct)
+    # Change to 14:00 UTC for CST (Nov-Mar) — or just leave at 13:00 and
+    # accept the brief arriving at 8 AM in winter
+    - cron: '0 13 * * *'
+
+  # Allow manual trigger from the Actions tab (useful for testing)
+  workflow_dispatch:
+
+jobs:
+  send-brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run daily brief
+        env:
+          ANTHROPIC_API_KEY:   ${{ secrets.ANTHROPIC_API_KEY }}
+          GMAIL_CLIENT_ID:     ${{ secrets.GMAIL_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          BRIEF_RECIPIENT:     ${{ secrets.BRIEF_RECIPIENT }}
+        run: python src/brief.py
